@@ -8,7 +8,7 @@ namespace Alchemy.Editor.Elements
     public sealed class MethodButton : VisualElement
     {
         private readonly StyleSheet _styleSheet = Resources.Load<StyleSheet>("Elements/MethodButton-Styles");
-        
+
         const string ButtonLabelText = "Invoke";
 
         public MethodButton(object target, MethodInfo methodInfo)
@@ -16,7 +16,7 @@ namespace Alchemy.Editor.Elements
             styleSheets.Add(_styleSheet);
 
             AddToClassList("method-button");
-            
+
             var parameters = methodInfo.GetParameters();
 
             // Create parameterless button
@@ -32,7 +32,7 @@ namespace Alchemy.Editor.Elements
 
             var box = new HelpBox();
             box.AddToClassList("method-button__help-box");
-            
+
             Add(box);
 
             foldout = new Foldout
@@ -41,14 +41,14 @@ namespace Alchemy.Editor.Elements
                 value = false
             };
             foldout.AddToClassList("method-button__foldout");
-            
+
             InternalAPIHelper.SetAcceptClicksIfDisabled(
                 InternalAPIHelper.GetClickable(foldout.Q<Toggle>()), true
             );
 
             button = new Button(() => methodInfo.Invoke(target, parameterObjects)) { text = ButtonLabelText };
             button.AddToClassList("method-button__parameter-button");
-            
+
             box.Add(foldout);
             box.Add(button);
 
@@ -65,5 +65,18 @@ namespace Alchemy.Editor.Elements
 
         readonly Foldout foldout;
         readonly Button button;
+
+        public void SetLableText(string labelText)
+        {
+            var foldout = this.Q<Foldout>();
+            if (foldout != null)
+            {
+                foldout.text = labelText;
+            }
+            else
+            {
+                this.Q<Button>().text = labelText;
+            }
+        }
     }
 }
